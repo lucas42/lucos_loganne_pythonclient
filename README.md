@@ -10,12 +10,13 @@ The following environment variables must be set for the package to function:
 ## API
 The package exposes a single function:
 
-### `updateLoganne(type, humanReadable, url=None)`
+### `updateLoganne(type, humanReadable, url=None, **extra_data)`
 Sends an event to the Loganne service.
 
 * **type** (str, required): The type of event being logged.
 * **humanReadable** (str, required): A description of the event that is easy for humans to understand.
 * **url** (str, optional): A link to a human-readable page regarding the item the event pertains to. Defaults to `None`.
+* **\*\*extra_data** (optional): Any additional keyword arguments are forwarded as extra fields in the event payload. Useful for attaching structured data to events (e.g. multiple URIs, identifiers, or other context).
 
 ## Usage
 ```python
@@ -26,6 +27,15 @@ updateLoganne(
     type="contactUpdated",
     humanReadable="The Contact \"John Doe\" has been updated",
     url="https://contacts.example.com/contact/123456"
+)
+
+# With extra structured data
+updateLoganne(
+    type="entityMerged",
+    humanReadable="Contact \"Old Name\" merged into \"New Name\"",
+    url="https://contacts.example.com/contact/789",
+    sourceUri="https://contacts.example.com/contact/123",
+    targetUri="https://contacts.example.com/contact/789",
 )
 ```
 
