@@ -16,11 +16,16 @@ session.headers.update({
 	"Content-Type": "application/json",
 })
 
-def updateLoganne(type: str, humanReadable: str, url: str = None, **extra_data):
+VALID_LEVELS = {"detail", "routine", "notable", "headline"}
+
+def updateLoganne(type: str, humanReadable: str, level: str, url: str = None, **extra_data):
+	if level not in VALID_LEVELS:
+		raise ValueError(f"Invalid level '{level}'. Must be one of: {', '.join(sorted(VALID_LEVELS))}")
 	payload = {
 		"type": type,
 		"source": SYSTEM,
 		"humanReadable": humanReadable,
+		"level": level,
 	}
 	if url:
 		payload["url"] = url
