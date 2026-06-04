@@ -10,11 +10,16 @@ The following environment variables must be set for the package to function:
 ## API
 The package exposes a single function:
 
-### `updateLoganne(type, humanReadable, url=None, **extra_data)`
+### `updateLoganne(type, humanReadable, level, url=None, **extra_data)`
 Sends an event to the Loganne service.
 
 * **type** (str, required): The type of event being logged.
 * **humanReadable** (str, required): A description of the event that is easy for humans to understand.
+* **level** (str, required): The editorial prominence of the event. Must be one of:
+  * `detail` — mechanical/low-interest churn, hidden from the default feed.
+  * `routine` — regular estate activity (the most common level).
+  * `notable` — worth emphasising in-feed.
+  * `headline` — estate-significant, suitable for a homepage glance.
 * **url** (str, optional): A link to a human-readable page regarding the item the event pertains to. Defaults to `None`.
 * **\*\*extra_data** (optional): Any additional keyword arguments are forwarded as extra fields in the event payload. Useful for attaching structured data to events (e.g. multiple URIs, identifiers, or other context).
 
@@ -26,6 +31,7 @@ from loganne import updateLoganne
 updateLoganne(
     type="contactUpdated",
     humanReadable="The Contact \"John Doe\" has been updated",
+    level="routine",
     url="https://contacts.example.com/contact/123456"
 )
 
@@ -33,6 +39,7 @@ updateLoganne(
 updateLoganne(
     type="entityMerged",
     humanReadable="Contact \"Old Name\" merged into \"New Name\"",
+    level="notable",
     url="https://contacts.example.com/contact/789",
     sourceUri="https://contacts.example.com/contact/123",
     targetUri="https://contacts.example.com/contact/789",
